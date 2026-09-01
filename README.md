@@ -1,4 +1,4 @@
-j# vinrei — Local AI Coding Assistant
+VINREI — Local AI Coding Assistant
 
 Build your own AI for coding. No closed models (no Gemini / OpenAI / Claude), no
 paid APIs, no per-token metering. Everything runs locally through [Ollama](https://ollama.ai),
@@ -48,13 +48,13 @@ that must be fast. Wrapped with `pybind11` / `ctypes` and called from Python.
 
 - [/] Initialize repo: Python 3.11+, `pyproject.toml`, ruff + mypy + pytest.
 - [/] Install and pin **Ollama**; learn the CLI (`ollama pull`, `serve`, `list`).
-- [ ] Pull candidate open-weight code bases: `qwen2.5-coder`, `deepseek-coder`,
+- [/] Pull candidate open-weight code bases: `qwen2.5-coder`, `deepseek-coder`,
       `codellama`, `starcoder2`. Benchmark raw quality on your own tasks.
-- [ ] Write a thin `ollama_client.py` that talks to the OpenAI-compatible API
+- [/] Write a thin `ollama_client.py` that talks to the OpenAI-compatible API
       (`http://localhost:11434/v1`) — no external SDKs. **No token counting.**
-- [ ] Smoke test: stream a completion, measure *tokens/sec* on your hardware
+- [/] Smoke test: stream a completion, measure *tokens/sec* on your hardware
       (this decides which model size you can run: 1–3B, 7–8B, 14B, 30B+).
-- [ ] Decide base model + quant level (GGUF `q4_K_M` / `q5_K_M` / `q8_0`) and
+- [/] Decide base model + quant level (GGUF `q4_K_M` / `q5_K_M` / `q8_0`) and
       lock it in a `MODEL.md`.
 
 ### Phase 1 — Coding assistant v0 (week 3–6)
@@ -62,18 +62,18 @@ that must be fast. Wrapped with `pybind11` / `ctypes` and called from Python.
 A working assistant before any training happens. Everything below works with the
 raw base model; fine-tuning only makes it better.
 
-- [ ] **CLI chat** (`vinrei "explain this bug"`), streaming output, plain text v1.
-- [ ] **Repo grounding:** codebase tree walking, `grep`/`rg` search, file reading
+- [/] **CLI chat** (`vinrei "explain this bug"`), streaming output, plain text v1.
+- [/] **Repo grounding:** codebase tree walking, `grep`/`rg` search, file reading
       with size caps, `.gitignore` awareness.
-- [ ] **RAG** on your own code: chunking + embeddings (`all-MiniLM`-class or the
+- [/] **RAG** on your own code: chunking + embeddings (`all-MiniLM`-class or the
       model's own embeddings), similarity search, inject top-k chunks into context.
-- [ ] **System + task prompts:** role framing, "only edit files when asked",
+- [/] **System + task prompts:** role framing, "only edit files when asked",
       constrained output formats (fenced code blocks / diff).
-- [ ] **Tool loop / agent:** model can request `read`, `grep`, `edit`, `run`.
+- [/] **Tool loop / agent:** model can request `read`, `grep`, `edit`, `run`.
       Implement tool-call parsing and execution (JSON or function-calling).
-- [ ] **C++ perf experiments:** if prompt assembly or embedding retrieval is the
+- [skip to phase 5] **C++ perf experiments:** if prompt assembly or embedding retrieval is the
       bottleneck, extract it into a small C++ core with `pybind11`.
-- [ ] Suggest/complete inline: FIM (fill-in-the-middle) via Ollama's `/api/generate`.
+- [/] Suggest/complete inline: FIM (fill-in-the-middle) via Ollama's `/api/generate`.
 
 **Exit criteria:** the assistant can explain, search, and edit a real repo
 end-to-end on your machine.
@@ -82,16 +82,16 @@ end-to-end on your machine.
 
 The data is the model. Most of the quality lives here.
 
-- [ ] Collect coding instruction data from your own sessions: prompts, answers,
+- [/] Collect coding instruction data from your own sessions: prompts, answers,
       and (critically) the diffs you actually accepted.
-- [ ] Curate open datasets: The Stack (v2), CodeAlpaca, Magicoder-Evol, etc.
+- [/] Curate open datasets: The Stack (v2), CodeAlpaca, Magicoder-Evol, etc.
       Filter for licenses, deduplicate, drop garbage (min length, no PII).
-- [ ] Normalize to a single fine-tune format: `<prompt>, <golden completion>`.
-- [ ] Compare instruction tuning (SFT) vs. preference tuning (DPO) _later_; start
+- [/] Normalize to a single fine-tune format: `<prompt>, <golden completion>`.
+- [/] Compare instruction tuning (SFT) vs. preference tuning (DPO) _later_; start
       with SFT.
-- [ ] Repo-level examples: each sample = task + repo context window (tree + files)
+- [/] Repo-level examples: each sample = task + repo context window (tree + files)
       + expected edit. This teaches "coding agent" behavior, not just text.
-- [ ] Store dataset versioned (parquet + hash), track splits (train/val/test),
+- [/] Store dataset versioned (parquet + hash), track splits (train/val/test),
       add a smoke eval harness (human_eval or a 20-task homemade suite).
 
 **Exit criteria:** the dataset covers chat, codegen, and agentic edit tasks, is
@@ -101,15 +101,15 @@ versioned, and reproduces a baseline score.
 
 Weights trained locally or on rented GPUs — still no per-token API costs.
 
-- [ ] **LoRA / QLoRA** fine-tune with a descendent of HuggingFace transformers or
+- [/] **LoRA / QLoRA** fine-tune with a descendent of HuggingFace transformers or
       PEFT; `bitsandbytes` 4-bit base for consumer GPUs.
-- [ ] Track with **wandb / mlflow**: loss, eval perplexity, eval-task pass rate.
-- [ ] Style/format overfitting check: keep validation data out of the train set
+- [/] Track with **wandb / mlflow**: loss, eval perplexity, eval-task pass rate.
+- [/] Style/format overfitting check: keep validation data out of the train set
       (data leakage is the #1 silent killer).
-- [ ] Full fine-tune vs LoRA: LoRA first; escalate only if quality stalls.
-- [ ] Checkpoint recipes: merge LoRA → full weights → quantize to GGUF
+- [/] Full fine-tune vs LoRA: LoRA first; escalate only if quality stalls.
+- [/] Checkpoint recipes: merge LoRA → full weights → quantize to GGUF
       (`llama.cpp` / `mlx` / `torch` → `ollama create`).
-- [ ] Load into Ollama as a custom model and run the Phase 1 harness
+- [/] Load into Ollama as a custom model and run the Phase 1 harness
       **unchanged** — prove the fine-tune made the agent measurably better.
 
 **Exit criteria:** custom model runs under Ollama and beats the base on your eval

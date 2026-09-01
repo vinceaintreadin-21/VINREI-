@@ -30,6 +30,7 @@ def complete(
     model: str = DEFAULT_MODEL,
     system: str | None = None,
     temperature: float = 0.2,
+    max_tokens: int = 512
 ) -> str:
     """
     Send a single prompt and return the full response as a string.
@@ -53,6 +54,7 @@ def complete(
         "messages": messages,
         "temperature": temperature,
         "stream": False,
+        "max_tokens": max_tokens,
     }
 
     with _post("/chat/completions", payload) as resp:
