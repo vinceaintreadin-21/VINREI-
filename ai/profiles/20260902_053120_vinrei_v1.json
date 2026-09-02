@@ -1,0 +1,69 @@
+{
+  "model": "vinrei:v1",
+  "timestamp": "2026-09-02T05:29:53",
+  "hardware": {
+    "cpu": "Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz",
+    "cpu_cores": 2,
+    "cpu_threads": 4,
+    "ram_total_gb": 15.0,
+    "ram_available_gb": 7.0
+  },
+  "ttft": {
+    "short_prompt": {
+      "prompt_chars": 45,
+      "time_to_first_token": 3.856,
+      "total_time": 4.638,
+      "tokens_per_sec": 0.65
+    },
+    "long_prompt": {
+      "prompt_chars": 406,
+      "time_to_first_token": 3.77,
+      "total_time": 7.06,
+      "tokens_per_sec": 6.37
+    }
+  },
+  "decode_speed": {
+    "short_response": {
+      "tokens": 1,
+      "total_time": 0.507,
+      "tokens_per_sec": 1.97
+    },
+    "medium_response": {
+      "tokens": 27,
+      "total_time": 3.643,
+      "tokens_per_sec": 7.41
+    },
+    "long_response": {
+      "tokens": 228,
+      "total_time": 30.308,
+      "tokens_per_sec": 7.52
+    }
+  },
+  "memory": {
+    "before_mb": 28.7,
+    "during_mb": 28.7,
+    "delta_mb": 0.0
+  },
+  "context_window": {
+    "10_lines": {
+      "prompt_chars": 100,
+      "time_to_first_token": 0.982,
+      "tokens_per_sec": 10.24
+    },
+    "50_lines": {
+      "prompt_chars": 400,
+      "time_to_first_token": 2.831,
+      "tokens_per_sec": 7.16
+    },
+    "100_lines": {
+      "prompt_chars": 790,
+      "time_to_first_token": 3.911,
+      "tokens_per_sec": 6.43
+    },
+    "200_lines": {
+      "prompt_chars": 1540,
+      "time_to_first_token": 6.981,
+      "tokens_per_sec": 4.36
+    }
+  }
+}

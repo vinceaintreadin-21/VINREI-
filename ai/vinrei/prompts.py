@@ -60,15 +60,23 @@ Task: produce a unified diff for the requested change.
 
 
 def build(task: str | None = None) -> str:
-    """
-    Combine the base system prompt with an optional task prompt.
+    import os
+    from pathlib import Path
 
-    Args:
-        task: One of 'explain', 'edit', 'debug', 'search', 'diff', or None.
+    cwd = str(Path.cwd())
+    tree = ""
+    try:
+        entries = sorted(Path(cwd).iterdir())
+        tree = "\n".join(
+            f"  {'[dir] ' if e.is_dir() else ''}{e.name}"
+            for e in entries[:30]  # cap at 30 entries
+            if not e.name.startswith(".")
+        )
+    except OSError:
+        pass
 
-    Returns:
-        The full system prompt string to pass to the model.
-    """
+    runtime = f"\nCurrent directory: {cwd}\nContents:\n{tree}\n"
+
     task_map = {
         "explain": TASK_EXPLAIN,
         "edit": TASK_EDIT,
@@ -76,6 +84,7 @@ def build(task: str | None = None) -> str:
         "search": TASK_SEARCH,
         "diff": TASK_DIFF,
     }
+
     if task and task in task_map:
-        return SYSTEM.strip() + "\n\n" + task_map[task].strip()
-    return SYSTEM.strip()
+        return SYSTEM.strip() + runtime + "\n\n" + task_map[task].strip()
+    return SYSTEM.strip() + runtime

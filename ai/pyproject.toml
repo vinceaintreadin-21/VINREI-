@@ -1,22 +1,41 @@
 [project]
-name = "ai"
+name = "vinrei"
 version = "0.1.0"
-description = ""
+description = "Local AI coding assistant powered by Ollama — no closed APIs, no token metering."
 authors = [
-    {name = "\u001b[H"}
+    {name = "vincent"}
 ]
-requires-python = ">=3.14"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11,<4.0"
+keywords = ["ai", "coding-assistant", "ollama", "local", "llm"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python :: 3",
+]
 dependencies = [
-    "numpy (>=2.5.2,<3.0.0)",
-    "ruff (>=0.16.5,<0.17.0)",
-    "pytest (>=9.1.1,<10.0.0)",
-    "ollama (>=0.6.2,<0.7.0)",
-    "sentence-transformers (>=6.0.0,<7.0.0)"
+    "numpy (>=1.26.0,<3.0.0)",
+    "sentence-transformers (>=2.0.0,<7.0.0)",
+    "psutil (>=5.9.0,<8.0.0)",
+    "textual (==0.47.1)",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "ruff (>=0.1.0)",
+    "pytest (>=7.0.0)",
+    "mypy (>=1.0.0)",
+]
 
 [project.scripts]
 vinrei = "vinrei.chat:main"
+vinrei-tui = "vinrei.tui:main"
+
+[project.urls]
+Repository = "https://github.com/vincent/vinrei"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

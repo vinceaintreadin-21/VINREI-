@@ -117,10 +117,10 @@ suite; deltas logged and reproducible.
 
 ### Phase 4 — Preference tuning & polish (week 15–18)
 
-- [ ] Generate candidate answers per prompt, rank them, build a preference set.
-- [ ] DPO / ORPO to teach "do the right edit" vs. "plausible-looking edit".
-- [ ] Prompt-injection and harm checks: don't run rm -rf because the model said so.
-- [ ] Guardrails: sandboxed command execution (container / seccomp) for the agent loop.
+- [/] Generate candidate answers per prompt, rank them, build a preference set.
+- [/] DPO / ORPO to teach "do the right edit" vs. "plausible-looking edit".
+- [/] Prompt-injection and harm checks: don't run rm -rf because the model said so.
+- [/] Guardrails: sandboxed command execution (container / seccomp) for the agent loop.
 
 ### Phase 5 — Performance & productization (week 19+)
 
@@ -169,7 +169,55 @@ suite; deltas logged and reproducible.
 
 ---
 
-## Quick start (current state: groundwork)
+## Quick start
+
+### Requirements
+- [Ollama](https://ollama.com) installed and running
+- Python 3.11+
+
+### Install
+
+```bash
+# 1. pull the model
+ollama pull qwen2.5-coder:1.5b
+
+# 2. start ollama
+ollama serve &
+
+# 3. install vinrei
+cd ai
+pip install -e .
+
+# 4. run
+vinrei "explain this bug"                        # single-shot CLI
+vinrei --task debug "why does this throw KeyError"
+vinrei-tui --model qwen2.5-coder:1.5b --repo .  # interactive TUI
+```
+
+### Docker
+
+```bash
+# build
+docker build -t vinrei .
+
+# run (requires ollama on host)
+docker run --rm -it --network host vinrei "write a binary search function"
+docker run --rm -it --network host vinrei vinrei-tui
+```
+
+### CLI flags
+
+| Flag | Description |
+|---|---|
+| `--model` / `-m` | Ollama model tag (default: `qwen2.5-coder:1.5b`) |
+| `--task` / `-t` | Task mode: `explain`, `edit`, `debug`, `search`, `diff` |
+| `--repo` / `-r` | Repo root — injects file tree into context |
+| `--rag` | Use RAG to find relevant code chunks automatically |
+| `--agent` | Enable agent mode (model can read/grep/edit/run files) |
+
+---
+
+## Quick start (development)
 
 ```bash
 # ollama server

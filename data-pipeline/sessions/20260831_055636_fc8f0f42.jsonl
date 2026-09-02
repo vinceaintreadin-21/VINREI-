@@ -1,3 +1,0 @@
-{"type": "session_start", "session_id": "fc8f0f42", "timestamp": "2026-08-31T05:56:36.973296+00:00", "model": "qwen2.5-coder:1.5b", "task": "explain"}
-{"type": "turn", "session_id": "fc8f0f42", "timestamp": "2026-08-31T05:56:36.973459+00:00", "prompt": "explain the stream function in ollama_client.py", "response": "The stream() function sends a POST request to /v1/chat/completions...", "accepted": true, "diff": "", "context": ""}
-{"type": "session_end", "session_id": "fc8f0f42", "timestamp": "2026-08-31T05:56:36.973538+00:00"}
