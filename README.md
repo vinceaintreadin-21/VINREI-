@@ -174,25 +174,42 @@ suite; deltas logged and reproducible.
 ### Requirements
 - [Ollama](https://ollama.com) installed and running
 - Python 3.11+
+- ~1.5 GB free disk space for the model
 
 ### Install
 
 ```bash
-# 1. pull the model
-ollama pull qwen2.5-coder:1.5b
-
-# 2. start ollama
+# 1. install ollama — https://ollama.com/download
 ollama serve &
 
-# 3. install vinrei
-cd ai
+# 2. download the fine-tuned model
+pip install huggingface-hub
+huggingface-cli download vinceaintreadinallat/vinrei-1.5b vinrei-q4.gguf --local-dir .
+huggingface-cli download vinceaintreadinallat/vinrei-1.5b Modelfile --local-dir .
+
+# 3. load into ollama
+ollama create vinrei:v1 -f Modelfile
+
+# 4. clone and install vinrei
+git clone https://github.com/vinceaintreadinallat/vinrei
+cd vinrei/ai
 pip install -e .
 
-# 4. run
-vinrei "explain this bug"                        # single-shot CLI
+# 5. run
+vinrei "explain this bug"                    # single-shot CLI
 vinrei --task debug "why does this throw KeyError"
-vinrei-tui --model qwen2.5-coder:1.5b --repo .  # interactive TUI
+vinrei-tui --model vinrei:v1 --repo .        # interactive TUI
 ```
+
+### Model
+
+The fine-tuned model is hosted on HuggingFace:
+[vinceaintreadinallat/vinrei-1.5b](https://huggingface.co/vinceaintreadinallat/vinrei-1.5b)
+
+- Base: `Qwen2.5-Coder-1.5B-Instruct`
+- Fine-tuned with QLoRA on CodeAlpaca + Magicoder-Evol + real usage sessions
+- Quantized to GGUF `q4_K_M` — runs on CPU, no GPU required
+- Eval score: **83.3%** (vs 78.3% base model)
 
 ### Docker
 
@@ -209,9 +226,9 @@ docker run --rm -it --network host vinrei vinrei-tui
 
 | Flag | Description |
 |---|---|
-| `--model` / `-m` | Ollama model tag (default: `qwen2.5-coder:1.5b`) |
+| `--model` / `-m` | Ollama model tag (default: `vinrei:v1`) |
 | `--task` / `-t` | Task mode: `explain`, `edit`, `debug`, `search`, `diff` |
-| `--repo` / `-r` | Repo root — injects file tree into context |
+| `--repo` / `-r` | Repo root — injects file tree + enables agent tools |
 | `--rag` | Use RAG to find relevant code chunks automatically |
 | `--agent` | Enable agent mode (model can read/grep/edit/run files) |
 
